@@ -1,36 +1,36 @@
 -- relationship between number_of_reviews and room_type (private room has most reviews)
-select room_type, SUM(number_of_reviews) as total_reviews
-from dbo.singapore_listings
-group by room_type
-order by total_reviews desc
+SELECT room_type, SUM(number_of_reviews) AS total_reviews
+FROM dbo.singapore_listings
+GROUP BY room_type
+ORDER BY total_reviews DESC
 
 -- relationship between number_of_reviews and neighbourhood_group (Central, East, N-E, West, North)
-select neighbourhood_group, SUM(number_of_reviews) as total_reviews
-from dbo.singapore_listings
-group by neighbourhood_group
-order by total_reviews desc
+SELECT neighbourhood_group, SUM(number_of_reviews) AS total_reviews
+FROM dbo.singapore_listings
+GROUP BY neighbourhood_group
+ORDER BY total_reviews DESC
 
 --relationship between room_type, neighbourhood_group and number_of_reviews
-select room_type, neighbourhood_group, AVG(minimum_nights) as min_nights, ROUND(AVG(price),2) as avg_price, SUM(number_of_reviews) as total_reviews
-from dbo.singapore_listings
-group by room_type, neighbourhood_group
-order by total_reviews desc
+SELECT room_type, neighbourhood_group, AVG(minimum_nights) AS min_nights, ROUND(AVG(price),2) AS avg_price, SUM(number_of_reviews) AS total_reviews
+FROM dbo.singapore_listings
+GROUP BY room_type, neighbourhood_group
+ORDER BY total_reviews DESC
 
 -- initial exploration indicates private rooms at central region have the most reviews; with average minimum stay of about 2 months
 -- 1st hypothesis: Target customers of most Airbnb in Singapore might be work pass holders instead of tourists; looking for medium to long term stay at private room in the central region (business hub).
 
 -- relationship between prices and reviews for private room (no strong corelation, need visualisation for clearer picture)
-select price, sum(number_of_reviews) as total_reviews
-from dbo.singapore_listings
-where room_type = 'Private room'
-group by price
-order by total_reviews desc
+SELECT price, sum(number_of_reviews) AS total_reviews
+FROM dbo.singapore_listings
+WHERE room_type = 'Private room'
+GROUP BY price
+ORDER BY total_reviews DESC
 
 -- relationship between room_type, neighbourhood_group and price (central region, East, West, N-E, North)
-select room_type, neighbourhood_group, ROUND(AVG(price),2) as Avg_price
-from dbo.singapore_listings
-group by room_type, neighbourhood_group
-order by room_type, Avg_price desc
+SELECT room_type, neighbourhood_group, ROUND(AVG(price),2) as Avg_price
+FROM dbo.singapore_listings
+GROUP BY room_type, neighbourhood_group
+ORDER BY room_type, Avg_price DESC
 
 -- Central region Airbnbs are rented at higher price.
 -- prices are not the sole reasons for number_of_reviews (no strong corelation), will have to explore further into amenities offered.
