@@ -1,130 +1,130 @@
 -- clean bedroom column
-select name, bedroom, bed, bath
-from dbo.singapore_listings
-where bedroom is null 
+SELECT name, bedroom, bed, bath
+FROM dbo.singapore_listings
+WHERE bedroom IS NULL 
 
 --populate null Bedroom cells with values from Bed column (bcoz some values in Bed Column rightfully belongs in Bedroom Column)
-Update singapore_listings
+UPDATE singapore_listings
 SET bedroom = bed
-where bedroom is null 
+WHERE bedroom IS NULL 
 
-Update singapore_listings
+UPDATE singapore_listings
 SET bedroom = trim(bedroom)
 
-select name, bedroom, bed, bath 
-from dbo.singapore_listings
-where bedroom like '%bed' OR bedroom like '%beds'
+SELECT name, bedroom, bed, bath 
+FROM dbo.singapore_listings
+WHERE bedroom LIKE '%bed' OR bedroom LIKE '%beds'
 
 -- rectify outliers where Bedroom column should not have values
-Update singapore_listings
-SET bedroom = null
-where bedroom like '%bed' OR bedroom like '%beds'
+UPDATE singapore_listings
+SET bedroom = NULL
+WHERE bedroom LIKE '%bed' OR bedroom LIKE '%beds'
 
 -- check bedroom column data validity
-select distinct bedroom
-from dbo.singapore_listings
+SELECT DISTINCT bedroom
+FROM dbo.singapore_listings
 
 -- clean Bed column
-select name, bed, bath 
-from dbo.singapore_listings
-where bed is null
+SELECT name, bed, bath 
+FROM dbo.singapore_listings
+WHERE bed IS NULL
 
-select name, bed, bath 
-from dbo.singapore_listings
-where bed not like '%bed%'
+SELECT name, bed, bath 
+FROM dbo.singapore_listings
+WHERE bed NOT LIKE '%bed%'
 
-select name, bed, bath 
-from dbo.singapore_listings
-where bath like '%bed%'
+SELECT name, bed, bath 
+FROM dbo.singapore_listings
+WHERE bath LIKE '%bed%'
 
 --populate null Bed cells with values from Bath column (bcoz some values in Bath Column rightfully belongs in Bed Column)
-Update singapore_listings
+UPDATE singapore_listings
 SET bed = bath
-where bath like '%bed%'
+WHERE bath LIKE '%bed%'
 
-select name, bedroom, bed, bath 
-from dbo.singapore_listings
-where bed like '%bedroom%'
+SELECT name, bedroom, bed, bath 
+FROM dbo.singapore_listings
+WHERE bed LIKE '%bedroom%'
 
-Update singapore_listings
+UPDATE singapore_listings
 SET bed = trim(bed)
 
 -- check data validity (where there is no values for Bed column, use Bedroom value)
-select distinct bed
-from dbo.singapore_listings
+SELECT DISTINCT bed
+FROM dbo.singapore_listings
 
 --clean Bath column
-select name, bath
-from dbo.singapore_listings
-where bath is null
+SELECT name, bath
+FROM dbo.singapore_listings
+WHERE bath IS NULL
 
-select name, bath
-from dbo.singapore_listings
-where bath not like '%bath%'
+SELECT name, bath
+FROM dbo.singapore_listings
+WHERE bath NOT LIKE '%bath%'
 
-Update singapore_listings --all info for Beb column
-SET bath = null
-where bath not like '%bath%'
+UPDATE singapore_listings --all info for Beb column
+SET bath = NULL
+WHERE bath NOT LIKE '%bath%'
 
-select distinct bath
-from dbo.singapore_listings
+SELECT DISTINCT bath
+FROM dbo.singapore_listings
 
-select REPLACE(bath, 'point', '.')
-from dbo.singapore_listings
+SELECT REPLACE(bath, 'point', '.')
+FROM dbo.singapore_listings
 
-Update singapore_listings
+UPDATE singapore_listings
 SET bath = trim(REPLACE(bath, 'point', '.'))
 
 -- create column Num_bedroom
-select distinct bedroom
-from dbo.singapore_listings
+SELECT DISTINCT bedroom
+FROM dbo.singapore_listings
 
-select distinct trim(REPLACE((REPLACE(bedroom, ' bedrooms', '')), ' bedroom', ''))
-from dbo.singapore_listings
+SELECT DISTINCT trim(REPLACE((REPLACE(bedroom, ' bedrooms', '')), ' bedroom', ''))
+FROM dbo.singapore_listings
 
 ALTER TABLE singapore_listings
-Add Num_bedroom Nvarchar(255);
+ADD Num_bedroom Nvarchar(255);
 
-Update singapore_listings
+UPDATE singapore_listings
 SET Num_bedroom = TRIM(REPLACE((REPLACE(bedroom, ' bedrooms', '')), ' bedroom', ''))
 
-select Num_bedroom, bedroom
-from dbo.singapore_listings
+SELECT Num_bedroom, bedroom
+FROM dbo.singapore_listings
 
 -- create column bed
-select distinct bed
-from dbo.singapore_listings
+SELECT DISTINCT bed
+FROM dbo.singapore_listings
 
-select distinct trim(REPLACE((REPLACE(bed, ' beds', '')), ' bed', ''))
-from dbo.singapore_listings
+SELECT DISTINCT trim(REPLACE((REPLACE(bed, ' beds', '')), ' bed', ''))
+FROM dbo.singapore_listings
 
 ALTER TABLE singapore_listings
-Add Num_bed Nvarchar(255);
+ADD Num_bed Nvarchar(255);
 
-Update singapore_listings
+UPDATE singapore_listings
 SET Num_bed = trim(REPLACE((REPLACE(bed, ' beds', '')), ' bed', ''))
 
-select Num_bed, bed
-from dbo.singapore_listings
+SELECT Num_bed, bed
+FROM dbo.singapore_listings
 
 
 -- create column Num_bath
-select distinct bath
-from dbo.singapore_listings
+SELECT DISTINCT bath
+FROM dbo.singapore_listings
 
-select distinct trim(REPLACE((REPLACE(bath, ' baths', '')), ' bath', ''))
-from dbo.singapore_listings
+SELECT DISTINCT trim(REPLACE((REPLACE(bath, ' baths', '')), ' bath', ''))
+FROM dbo.singapore_listings
 
 ALTER TABLE singapore_listings
-Add Num_bath Nvarchar(255);
+ADD Num_bath Nvarchar(255);
 
-Update singapore_listings
+UPDATE singapore_listings
 SET Num_bath = trim(REPLACE((REPLACE(bath, ' baths', '')), ' bath', ''))
 
-select distinct Num_bath
+SELECT DISTINCT Num_bath
 from dbo.singapore_listings
 
-select
+SELECT
 CASE
 	WHEN Num_bath LIKE 'Private half-bath' THEN '0.5 private'
 	WHEN Num_bath LIKE 'Shared half-bath' THEN '0.5 shared'
@@ -132,9 +132,9 @@ CASE
 	WHEN Num_bath LIKE 'o shared' THEN '0'
 	ELSE Num_bath
 END AS New_Num_bah
-From dbo.singapore_listings
+FROM dbo.singapore_listings
 
-Update singapore_listings
+UPDATE singapore_listings
 SET Num_bath = 
 (CASE
 	WHEN Num_bath LIKE 'Private half-bath' THEN '0.5 private'
@@ -144,6 +144,6 @@ SET Num_bath =
 	ELSE Num_bath
 END)
 
-select distinct Num_bath
-From dbo.singapore_listings
-order by Num_bath 
+SELECT DISTINCT Num_bath
+FROM dbo.singapore_listings
+ORDER BY Num_bath 
